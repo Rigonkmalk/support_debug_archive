@@ -90,7 +90,5 @@ download_audit($audit_file);
 //go back to debug page
 ?>
 <script type="text/javascript">
-	document.querySelector(".bt_info");
-	btn.classList.remove("button--loading");
 	window.location.href = "?p=50115&o=debug";
 </script>
