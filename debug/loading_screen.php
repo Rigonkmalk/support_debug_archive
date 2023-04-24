@@ -60,7 +60,7 @@
 }
 </style>
 </head>
-<body onload="myFunction()" style="margin:0;">
+<body onload="generate_audit()" style="margin:0;">
 
 <div id="loader"></div>
 <h2  id="wait-message">Generating Archive, please wait 😁</h2>
@@ -75,7 +75,7 @@
 <script>
 
 
-function myFunction() {
+function generate_audit() {
 	window.location.href='audit.php';
 }
 </script>
