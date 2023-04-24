@@ -54,12 +54,15 @@ function download_audit($audit_file){
 		
 		//Define header information
 		header( "Content-Description: File Transfer" );
-		header( "Content-Type: application/force-download");
+		header('Content-Type: text/markdown');
+		header('Expires: 0');
+      		header('Cache-Control: must-revalidate');
+      		header('Pragma: public');
 		header( "Content-Length: " . filesize($audit_file) );
 		header('Content-Disposition: attachment; filename="'.basename($audit_file).'"');
-
+		ob_clean();
+		flush();
 		readfile($audit_file);
-
 	}
 	else{
 		audit_log("File downloading failed. File '$audit_file' does not exist");
@@ -73,7 +76,7 @@ $audit_script_get_url = "https://raw.githubusercontent.com/centreon/centreon-gor
 $log_file = "/var/log/php-fpm/get_platform_log_and_info.log";
 $output_path = "/usr/share/centreon/bin/gorgone_audit.pl";
 $result_path = "/var/lib/centreon/audits";
-
+$end_screen = "end_screen.html";
 
 if (!file_exists($audit_scrpit_path)) {	
 	audit_log("Audit Script not found !");
@@ -84,11 +87,11 @@ else {
 }
 
 $audit_file = generateAudit($audit_scrpit_path, $result_path);
-download_audit($audit_file);
+include('ending_screen.html');
+$_POST["audit_file"] = $audit_file;
 
-
-//go back to debug page
 ?>
-<script type="text/javascript">
-	window.location.href = "?p=50115&o=debug";
+
+<script>
+window.location.replace('download.php?audit_file=<?=$_POST["audit_file"]?>');
 </script>
