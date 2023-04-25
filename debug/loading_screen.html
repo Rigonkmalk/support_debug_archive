@@ -14,15 +14,22 @@
   margin: -76px 0 0 -76px;
   border: 16px solid #f3f3f3;
   border-radius: 50%;
-  border-top: 16px solid #3498db;
+  border-top: 16px solid #3576c0;
   -webkit-animation: spin 2s linear infinite;
   animation: spin 2s linear infinite;
 }
 
-#wait-message{
+.wait-message {
   font-family: Roboto, Helvetica, Arial, sans-serif;
-  margin : 10%;
   text-align: center;
+}
+
+#top-message {
+  margin : 10%;
+}
+
+#bottom-message {
+  margin : 23%;
 }
 
 @-webkit-keyframes spin {
@@ -54,27 +61,16 @@
   to{ bottom:0; opacity:1 }
 }
 
-#myDiv {
-  display: none;
-  text-align: center;
-}
 </style>
 </head>
 <body onload="generate_audit()" style="margin:0;">
 
 <div id="loader"></div>
-<h2  id="wait-message">Generating Archive, please wait 😁</h2>
-
-
-<div style="display:none;" id="myDiv" class="animate-bottom">
-  <h2></h2>
-	<h2>Vous êtes pret a ouvrir votre ticket !</h2>
-  <p>Some text in my newly loaded page..</p>
+<h2  class = "wait-message" id="top-message">Generating archive, please wait 😁</h2>
+<p class = "wait-message" id="bottom-message">This might be a good time to get a coffee ☕</p>
 </div>
 
 <script>
-
-
 function generate_audit() {
 	window.location.href='audit.php';
 }

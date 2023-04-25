@@ -64,7 +64,7 @@ $form->addElement('checkbox', 'debug_gorgone', _("Centreon Gorgone debug"));
 $form->addElement('checkbox', 'debug_centreontrapd', _("Centreontrapd debug"));
 
 // Download button of label platform_log_and_info
-$form->addElement('button','debug_platform_log_and_info',_("Download"),array("onClick"=>"javascript:window.location.href='include/Administration/parameters/debug/loading_screen.php'", 'class' => 'btc bt_info'));
+$form->addElement('button','debug_platform_log_and_info',_("Download"),array("onClick"=>"javascript:window.location.href='include/Administration/parameters/debug/loading_screen.html'", 'class' => 'btc bt_info'));
 
 $form->applyFilter('__ALL__', 'myTrim');
 $form->applyFilter('debug_path', 'slash');

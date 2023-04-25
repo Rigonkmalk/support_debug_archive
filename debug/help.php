@@ -14,4 +14,4 @@ $help['tip_sql_debug'] = dgettext('help', 'Enables SQL debug.');
 $help['tip_centcore_debug'] = dgettext('help', 'Enables Centcore debug.');
 $help['tip_centstorage_debug'] = dgettext('help', 'Enables Centstorage debug.');
 $help['tip_centreontrapd_debug'] = dgettext('help', 'Enables Centreontrapd debug.');
-$help['tip_debug_platform_log_and_info'] = dgettext('help', 'Download a zipped archive with your platform\'s informations and logs to identify issues');
+$help['tip_debug_platform_log_and_info'] = dgettext('help', 'Download a zipped archive with your platform\'s informations, configurations and log files to help identify issues');
