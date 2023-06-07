@@ -72,7 +72,7 @@ function audit_log(string $message){
 	
 	$epoch=time();
 	$log_message = "[$epoch] $message\n";
-	$log_file = "/var/log/php-fpm/get_platform_log_and_info.log";
+	$log_file = "/var/log/get_platform_log_and_info.log";
 
 	file_put_contents($log_file, $log_message, FILE_APPEND | LOCK_EX);
 }
