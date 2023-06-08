@@ -43,14 +43,22 @@ function generateAudit() {
 function getAuditScript() {
 
 	$url = "https://raw.githubusercontent.com/centreon/centreon-gorgone/develop/contrib/gorgone_audit.pl";
-	$directory_audit_script = "/usr/share/centreon/bin/";	
+	$directory_audit_script = "/usr/share/centreon/www/include/Administration/parameters/debug/";	
 	$audit_script_name = "gorgone_audit.pl";
 	$audit_scrpit_path = $directory_audit_script.$audit_script_name;
+	// Get content from url without setting allow_url_fopen=1
+	$curlSession = curl_init();
+    	curl_setopt($curlSession, CURLOPT_URL, $url);
+	curl_setopt($curlSession, CURLOPT_BINARYTRANSFER, true);
+    	curl_setopt($curlSession, CURLOPT_RETURNTRANSFER, true);
 
+	$audit_script = curl_exec($curlSession);
+	curl_close($curlSession);
+	
 	if (!file_exists($audit_scrpit_path)) {
         	audit_log("Audit Script not found !");
         	audit_log("Downloading audit script from $url");
-        	if (file_put_contents($audit_scrpit_path, file_get_contents($url))){
+        	if (file_put_contents($audit_scrpit_path, $audit_script)){
                 	audit_log("Audit script downloaded successfully");
                 	audit_log("Audit script path is : $audit_scrpit_path");
   
@@ -72,7 +80,7 @@ function audit_log(string $message){
 	
 	$epoch=time();
 	$log_message = "[$epoch] $message\n";
-	$log_file = "/var/log/get_platform_log_and_info.log";
+	$log_file = "/var/log/centreon/get_platform_log_and_info.log";
 
 	file_put_contents($log_file, $log_message, FILE_APPEND | LOCK_EX);
 }
