@@ -4,15 +4,15 @@ function generateArchive($files) {
 
 	$epoch=time();
 	$archive_destination_path="/tmp/";
-	$archive_name="conf_and_logs_$epoch.zip";
+	$archive_name="conf_and_logs_$epoch.tar.gz";
 	$full_archive_path = $archive_destination_path.$archive_name;
-	$zipping_error = shell_exec("zip -r9 $full_archive_path $files");
+	$zipping_error = shell_exec("tar -czvf $full_archive_path $files");
 
 	if (file_exists($full_archive_path)) {
                 audit_log("Zipped archive generated successfully $audit_result_path");
         }
         else {
-                audit_log("Zipped archive generation failed ! \nzip -r9 $full_archive_path $files : $zipping_error");
+                audit_log("Zipped archive generation failed ! \ntar -czvf $full_archive_path $files : $zipping_error");
 	}
     return $full_archive_path;
 }
@@ -46,6 +46,7 @@ function getAuditScript() {
 	$directory_audit_script = "/usr/share/centreon/www/include/Administration/parameters/debug/";	
 	$audit_script_name = "gorgone_audit.pl";
 	$audit_scrpit_path = $directory_audit_script.$audit_script_name;
+	
 	// Get content from url without setting allow_url_fopen=1
 	$curlSession = curl_init();
     	curl_setopt($curlSession, CURLOPT_URL, $url);
@@ -78,28 +79,36 @@ function getAuditScript() {
 
 function audit_log(string $message){
 	
-	$epoch=time();
-	$log_message = "[$epoch] $message\n";
+	$epoch = time();
+	$datetimeFormat = 'd-m-Y H:i:s';
+
+	$date = new \DateTime();
+	$date->setTimestamp($epoch);
+	$formated_date = $date->format($datetimeFormat);
+	
+	$log_message = "[$formated_date] $message\n";
 	$log_file = "/var/log/centreon/get_platform_log_and_info.log";
 
 	file_put_contents($log_file, $log_message, FILE_APPEND | LOCK_EX);
 }
 
 $end_screen = "end_screen.html";
+
 // files to archive
 $centreon_conf_path = "/etc/centreon*";
 $cron_jobs_path = "/etc/cron.d";
-$broker_logs = "/var/log/centreon*";
+$centreon_logs = "/var/log/centreon*/*.log";
 $messages_logs = "/var/log/messages";
-$php_logs = "/var/log/php-fpm";
+$php_logs = "/var/log/php-fpm/*.log";
 
 $audit_file = generateAudit();
-$files_to_archive = "$centreon_conf_path $cron_jobs_path $broker_logs $php_logs $messages_logs $audit_file";
-$zipped_archive=generateArchive($files_to_archive);
+
+$files_to_archive = "$centreon_conf_path $cron_jobs_path $centreon_logs $php_logs $messages_logs $audit_file";
+$archive=generateArchive($files_to_archive);
 
 include('ending_screen.html');
 ?>
 
 <script>
-	window.location.replace('download.php?audit_file=<?=$zipped_archive?>');
+	window.location.replace('download.php?audit_file=<?=$archive?>');
 </script>
