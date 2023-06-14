@@ -1,5 +1,5 @@
 # Support debug archive tool
-Download a zipped archive with the platform's informations and logs to identify issues easier
+Download a zipped archive with the platform's informations and logs to identify issues easier (can take more than 5 min to generate).
 
 ## How to install ?
 1. Clone this repository on to your centreon central server :
