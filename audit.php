@@ -47,19 +47,20 @@ function getAuditScript() {
 	$audit_script_name = "gorgone_audit.pl";
 	$audit_scrpit_path = $directory_audit_script.$audit_script_name;
 	
-	// Get content from url without setting allow_url_fopen=1
-	$curlSession = curl_init();
-    	curl_setopt($curlSession, CURLOPT_URL, $url);
-	curl_setopt($curlSession, CURLOPT_BINARYTRANSFER, true);
-    	curl_setopt($curlSession, CURLOPT_RETURNTRANSFER, true);
-
-	$audit_script = curl_exec($curlSession);
-	curl_close($curlSession);
-	
 	if (!file_exists($audit_scrpit_path)) {
         	audit_log("Audit Script not found !");
         	audit_log("Downloading audit script from $url");
-        	if (file_put_contents($audit_scrpit_path, $audit_script)){
+		
+		// Get content from url without setting allow_url_fopen=1
+        	$curlSession = curl_init();
+        	curl_setopt($curlSession, CURLOPT_URL, $url);
+        	curl_setopt($curlSession, CURLOPT_BINARYTRANSFER, true);
+        	curl_setopt($curlSession, CURLOPT_RETURNTRANSFER, true);
+
+        	$audit_script = curl_exec($curlSession);
+		curl_close($curlSession);
+
+		if (file_put_contents($audit_scrpit_path, $audit_script)){
                 	audit_log("Audit script downloaded successfully");
                 	audit_log("Audit script path is : $audit_scrpit_path");
   
