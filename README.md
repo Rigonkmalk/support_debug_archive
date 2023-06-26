@@ -12,6 +12,8 @@ Download a zipped archive with the platform's informations and logs to identify 
 4. Change the ```ProxyTimeout``` setting of apache to ```1000``` in the configuration file :
   - Path for RHEL   : ```/etc/httpd/conf.d/10-centreon.conf```
   - Path for Debian : ```/etc/apache2/sites-available/centreon.conf```
+  - Restart apache
+    - ```systemctl restart httpd```
 5. Enjoy in Administration  >  Parameters  >  Debug :
 
 <img alt="image" src="https://github.com/ykacherCentreon/support_debug_archive/assets/85548802/ba40fe1c-b8b1-4b93-9e5e-8106e5ad8c7e">
