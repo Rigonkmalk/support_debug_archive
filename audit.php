@@ -9,7 +9,7 @@ function generateArchive($files) {
 	$zipping_error = shell_exec("tar -czvf $full_archive_path $files");
 
 	if (file_exists($full_archive_path)) {
-                audit_log("Zipped archive generated successfully $audit_result_path");
+                audit_log("Zipped archive generated successfully $full_archive_path");
         }
         else {
                 audit_log("Zipped archive generation failed ! \ntar -czvf $full_archive_path $files : $zipping_error");
