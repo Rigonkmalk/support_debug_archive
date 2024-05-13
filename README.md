@@ -3,7 +3,8 @@ Download a zipped archive with the platform's information and logs to identify i
 
 ## How to install ?
 1. Clone this repository on to your centreon central server :
-  - ```git clone https://github.com/ykacherCentreon/support_debug_archive.git ~/support_debug_archive```
+  - ```git clone https://github.com/ykacherCentreon/support_debug_archive.git ~/support_debug_archive```  
+  Incase you are not able to do so from your central server (e.g., no internet access), transfer the downloaded files via sftp or a drive and proceed with the steps below.
 2. Backup the content of /usr/share/centreon/www/include/Administration/parameters/debug : 
   - ```cp -r /usr/share/centreon/www/include/Administration/parameters/debug{,.origin}```
 3. Copy all the files from this repo in 
