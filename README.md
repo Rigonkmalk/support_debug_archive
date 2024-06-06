@@ -7,7 +7,7 @@ Download a zipped archive with the platform's information and logs to identify i
   - RHEL : ```yum install git``` 
   - Debian : ```apt update && apt install git```
 2. Clone this repository on to your centreon central server :
-  - ```git clone https://github.com/ykacherCentreon/support_debug_archive.git ~/support_debug_archive```  
+  - ```git clone https://github.com/ykacherCentreon/support_debug_archive.git ~/support_debug_archive```  <br />
   In case you are not able to do so from your central server (e.g., no internet access), transfer the downloaded files via sftp or a drive and proceed with the steps below.
 3. Backup the content of /usr/share/centreon/www/include/Administration/parameters/debug : 
   - ```sudo -u centreon /bin/cp -r /usr/share/centreon/www/include/Administration/parameters/debug{,.origin}```
@@ -31,3 +31,28 @@ In case there is any issue with the tool, check the log files below for clues :
 - ```/var/log/php-fpm/centreon-error.log```
 - RHEL : ```grep -Rni "timeout" /var/log/httpd```
 - Debian : ```grep -Rni "timeout" /var/log/apache2/```
+
+## Known Issues and solutions
+
+NOTE : The more poller you have, the longer the audit will take.  
+ - You can refer to the upper step 5 to increase the timeout value or the step 5 below to exclude the audit of your pollers and speed up the archive generation. 
+  
+- Hanging on "Generating, please wait 😁" ?
+1. Refresh the page and try again, this can happens right after installation.
+2. If you still encounter the issue, please check if you have a timeout related to /usr/share/centreon/www/include/Administration/parameters/debug/audit.php :<br />
+    - RHEL : ```grep -Rni "/parameters/debug/" /var/log/httpd/```<br />
+    - Debian : ```grep -Rni "/parameters/debug/" /var/log/apache2/```
+3. You can kill the hanging process :
+     - ```ps -ef | grep gorgone_audit.pl | grep -v grep | awk '{print $2}' && (kill -TERM $!; sleep 1; kill -9 $!)```
+4. Refresh the page and try again.
+5. Still stuck ? Bypass the audit generation :
+     - Comment the line 105 in /usr/share/centreon/www/include/Administration/parameters/debug/audit.php :
+     ```php   
+      ...
+      103  $php_logs = "/var/log/php-fpm/*.log";
+      104
+      105  //$audit_file = generateAudit();
+      ...
+      ```
+     - Kill the hanged process (refer to step 3).
+
