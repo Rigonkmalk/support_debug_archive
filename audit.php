@@ -31,7 +31,7 @@ function generateAudit() {
 	$audit_result_path   = "$audit_result_folder/$epoch-gorgoneaudit.md";
 	$audit_options       = "--markdown=$audit_result_path";
 	$timeout_cmd         = "/bin/timeout";
-	$audit_timeout       = "1000";
+	$audit_timeout       = "60"; // if you have a lot of poller you may ajust this value.
 	$audit_command       = "$timeout_cmd $audit_timeout $audit_scrpit_path $audit_options";
 
 	audit_log("Generating audit ...");
