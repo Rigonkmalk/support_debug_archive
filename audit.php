@@ -2,17 +2,23 @@
 
 function generateArchive($files) {
 
-	$epoch=time();
-	$archive_destination_path="/tmp/";
-	$archive_name="conf_and_logs_$epoch.tar.gz";
-	$full_archive_path = $archive_destination_path.$archive_name;
-	$zipping_error = shell_exec("tar -czvf $full_archive_path $files");
+	$epoch                    = time();
+	$archive_destination_path = "/tmp/";
+	$archive_name             = "conf_and_logs_$epoch.tar.gz";
+	$full_archive_path        = $archive_destination_path.$archive_name;
+	$files_to_archive         = "";
+
+	foreach ($files as $file){
+		$files_to_archive .= " $file";
+	}
+
+	$zipping_error = shell_exec("sudo /bin/tar -czvf $full_archive_path $files_to_archive");
 
 	if (file_exists($full_archive_path)) {
                 audit_log("Zipped archive generated successfully $full_archive_path");
         }
         else {
-                audit_log("Zipped archive generation failed ! \ntar -czvf $full_archive_path $files : $zipping_error");
+                audit_log("Zipped archive generation failed ! \ntar -czvf $full_archive_path $files_to_archive : $zipping_error");
 	}
     return $full_archive_path;
 }
@@ -99,19 +105,24 @@ function audit_log(string $message){
 $end_screen = "end_screen.html";
 
 // files to archive
-$centreon_conf_path = "/etc/centreon*";
-$cron_jobs_path     = "/etc/cron.d";
-$centreon_logs      = "/var/log/centreon*/*.log";
-$messages_logs      = "/var/log/messages";
-$syslog_logs        = "/var/log/syslog";
-$php_logs           = "/var/log/php-fpm/*.log";
-$apache_logs_rhel   = "/var/log/httpd/*log";
-$apache_logs_deian  = "/var/log/apache2/*log";
+$conf_and_log_files_to_archive = [
+	"/etc/centreon*",
+	"/etc/cron.d",
+	"/var/log/centreon*/*.log",
+    "/var/log/messages",
+    "/var/log/syslog",
+    "/var/log/php-fpm/*.log",
+    "/var/log/httpd/access_log",
+	"/var/log/httpd/error_log",
+	"/var/log/apache2/access.log",
+	"/var/log/apache2/error.log",
+ 	"/var/log/apache2/other_vhosts_access.log"
+  ];
 
-$audit_file = generateAudit();
+// Comment the line below if it takes to long to generate
+ $conf_and_log_files_to_archive [] = generateAudit();
 
-$files_to_archive = "$centreon_conf_path $cron_jobs_path $centreon_logs $php_logs $messages_logs $audit_file";
-$archive=generateArchive($files_to_archive);
+$archive=generateArchive($conf_and_log_files_to_archive);
 
 include('ending_screen.html');
 ?>

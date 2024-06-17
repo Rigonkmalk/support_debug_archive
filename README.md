@@ -1,5 +1,5 @@
 # Support debug archive tool
-Download a zipped archive with the platform's information and logs to identify issues easier (⚠ can take more than 5 min to generate ⚠).
+Download a zipped archive with the platform's information and logs to identify issues easier.
 
 ## How to install ?
 
@@ -21,11 +21,26 @@ Download a zipped archive with the platform's information and logs to identify i
   - Path for Debian : ```/etc/apache2/sites-available/centreon.conf```
     - Restart apache
       - ```systemctl restart apache2```
-6. Enjoy, go to " Administration  >  Parameters  >  Debug " :
+6. Add the sudoers command below :
+  ```
+  cat <<EOF > /etc/sudoers.d/support_debug_archive
+User_Alias      HTTP_USERS=apache,www-data
+Defaults:HTTP_USERS !requiretty
+
+HTTP_USERS   ALL = (ALL) NOPASSWD: /bin/tar -czvf *
+
+EOF
+  ``` 
+7. Enjoy, go to " Administration  >  Parameters  >  Debug " :
 
 <img alt="image" src="https://github.com/ykacherCentreon/support_debug_archive/assets/85548802/ba40fe1c-b8b1-4b93-9e5e-8106e5ad8c7e">
 
+## How to update ?
+
+Execute the same steps as for the intallation except for 1,3,5; you can skip those.
+
 ## Log
+
 In case there is any issue with the tool, check the log files below for clues :
 - ```/var/log/centreon/get_platform_log_and_info.log```
 - ```/var/log/php-fpm/centreon-error.log```
@@ -46,11 +61,10 @@ NOTE : The more poller you have, the longer the audit will take.
      - ```ps -ef | grep gorgone_audit.pl | grep -v grep | awk '{print $2}' && (kill -TERM $!; sleep 1; kill -9 $!)```
 4. Refresh the page and try again.
 5. Still stuck ? Bypass the audit generation :
-     - Comment the line 111 in /usr/share/centreon/www/include/Administration/parameters/debug/audit.php :
+     - Comment the line 123 in /usr/share/centreon/www/include/Administration/parameters/debug/audit.php :
      ```php   
-      110 ...
-      111  //$audit_file = generateAudit();
-      112 ...
+      122 ...
+      123 //$conf_and_log_files_to_archive [] = generateAudit();
+      124 ...
       ```
      - Kill the hanged process (refer to step 3).
-
