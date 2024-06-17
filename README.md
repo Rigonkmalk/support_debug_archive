@@ -46,13 +46,11 @@ NOTE : The more poller you have, the longer the audit will take.
      - ```ps -ef | grep gorgone_audit.pl | grep -v grep | awk '{print $2}' && (kill -TERM $!; sleep 1; kill -9 $!)```
 4. Refresh the page and try again.
 5. Still stuck ? Bypass the audit generation :
-     - Comment the line 105 in /usr/share/centreon/www/include/Administration/parameters/debug/audit.php :
+     - Comment the line 111 in /usr/share/centreon/www/include/Administration/parameters/debug/audit.php :
      ```php   
-      ...
-      103  $php_logs = "/var/log/php-fpm/*.log";
-      104
-      105  //$audit_file = generateAudit();
-      ...
+      110 ...
+      111  //$audit_file = generateAudit();
+      112 ...
       ```
      - Kill the hanged process (refer to step 3).
 
