@@ -18,15 +18,18 @@ function generateArchive($files) {
 }
 
 function generateAudit() {
-
-	$audit_scrpit_path = getAuditScript();
+	
+	$audit_scrpit_path   = getAuditScript();
 	$audit_result_folder = "/tmp";
-	$epoch=time();
-	$audit_result_path = "$audit_result_folder/$epoch-gorgoneaudit.md";
-	$audit_options = "--markdown=$audit_result_path";
-		
+	$epoch               = time();
+	$audit_result_path   = "$audit_result_folder/$epoch-gorgoneaudit.md";
+	$audit_options       = "--markdown=$audit_result_path";
+	$timeout_cmd         = "/bin/timeout";
+	$audit_timeout       = "1000";
+	$audit_command       = "$timeout_cmd $audit_timeout $audit_scrpit_path $audit_options";
+
 	audit_log("Generating audit ...");
-	$output = shell_exec("$audit_scrpit_path $audit_options");
+	$output = shell_exec($audit_command);
 	audit_log("Audit output : $output");
 	
 	if (file_exists($audit_result_path)) {
@@ -97,10 +100,13 @@ $end_screen = "end_screen.html";
 
 // files to archive
 $centreon_conf_path = "/etc/centreon*";
-$cron_jobs_path = "/etc/cron.d";
-$centreon_logs = "/var/log/centreon*/*.log";
-$messages_logs = "/var/log/messages";
-$php_logs = "/var/log/php-fpm/*.log";
+$cron_jobs_path     = "/etc/cron.d";
+$centreon_logs      = "/var/log/centreon*/*.log";
+$messages_logs      = "/var/log/messages";
+$syslog_logs        = "/var/log/syslog";
+$php_logs           = "/var/log/php-fpm/*.log";
+$apache_logs_rhel   = "/var/log/httpd/*log";
+$apache_logs_deian  = "/var/log/apache2/*log";
 
 $audit_file = generateAudit();
 
