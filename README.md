@@ -37,7 +37,8 @@ EOF
 
 ## How to update ?
 
-Remove the foalder ``~/support_debug_archive`` created upon install and execute the same steps as for the intallation except for 1,3,5; you can skip those.
+Remove the ``~/support_debug_archive`` directory created upon install and execute the same steps as for the intallation except for 1,3,5; you can skip those :
+ - ``rm -rf ~/support_debug_archive``
 
 ## Log
 
