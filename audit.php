@@ -16,8 +16,7 @@ $conf_and_log_files_to_archive = [
 	"/var/log/httpd/error_log",
 	"/var/log/apache2/access.log",
 	"/var/log/apache2/error.log",
-	"/var/log/apache2/other_vhosts_access.log",
-	"/tmp/get_platform_log_and_info.log"
+	"/var/log/apache2/other_vhosts_access.log"
   ];
 
 // Comment the line below if it takes to long to generate
