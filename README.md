@@ -61,7 +61,10 @@ NOTE : The more poller you have, the longer the audit will take.
 3. You can kill the hanging process :
      - ```ps -ef | grep gorgone_audit.pl | grep -v grep | awk '{print $2}' && (kill -TERM $!; sleep 1; kill -9 $!)```
 4. Refresh the page and try again.
-5. Still stuck ? Bypass the audit generation :
+5. Still stuck ? 
+   1. You can adapt the timeout value for the audit generation at line 34 of /usr/share/centreon/www/include/Administration/parameters/debug/functions.php :  
+   ```$audit_timeout       = "60"; // if you have a lot of poller you may ajust this value```
+   2. Or bypass the audit generation :
      - Comment the line 24 in /usr/share/centreon/www/include/Administration/parameters/debug/audit.php :
      ```php   
       23 ...
