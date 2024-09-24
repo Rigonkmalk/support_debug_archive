@@ -18,7 +18,8 @@ function generateArchive($files) {
                 audit_log("Zipped archive generated successfully $full_archive_path");
         }
         else {
-                audit_log("Zipped archive generation failed ! \ntar -czvf $full_archive_path $files_to_archive : $zipping_error");
+                audit_log("Zipped archive generation failed ! Checkout why below : \nsudo /bin/tar -czvf $full_archive_path $files_to_archive : $zipping_error");
+				audit_log("[DEBUG] sudo /bin/tar -czvf $full_archive_path $files_to_archive : $zipping_error");
 	}
     return $full_archive_path;
 }
@@ -120,6 +121,7 @@ function download_audit($audit_file){
     }
     else{
             audit_log("File downloading failed. File '$audit_file' does not exist");
+			include('error_screen.html');
     }
 }
 
