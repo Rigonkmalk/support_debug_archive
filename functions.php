@@ -12,7 +12,7 @@ function generateArchive($files) {
 		$files_to_archive .= " $file";
 	}
 
-	$zipping_error = shell_exec("sudo /bin/tar -czvf $full_archive_path $files_to_archive");
+	$zipping_error = shell_exec("sudo /bin/tar -czvf $full_archive_path $files_to_archive 2>&1");
 
 	if (file_exists($full_archive_path)) {
                 audit_log("Zipped archive generated successfully $full_archive_path");
