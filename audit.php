@@ -23,8 +23,6 @@ $conf_and_log_files_to_archive = [
  $conf_and_log_files_to_archive [] = generateAudit();
 
 $archive=generateArchive($conf_and_log_files_to_archive);
-
-include('ending_screen.html');
 ?>
 
 <script>

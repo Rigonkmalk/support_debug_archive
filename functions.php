@@ -118,6 +118,7 @@ function download_audit($audit_file){
     ob_clean();
     flush();
             readfile($audit_file);
+			include('ending_screen.html');
     }
     else{
             audit_log("File downloading failed. File '$audit_file' does not exist");
