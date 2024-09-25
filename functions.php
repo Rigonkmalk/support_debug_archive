@@ -43,7 +43,7 @@ function generateAudit() {
 		audit_log("[INFO] Audit file generated successfully $audit_result_path");
 	}
 	else {
-        	audit_log("[WARNING] Audit file generation failed ! Checkout the bulletpoint n°5 of the documentation for help :\nhttps://github.com/y-kacher/support_debug_archive?tab=readme-ov-file#known-issues-and-solutions ");
+        	audit_log("[WARNING] Audit file generation failed ! Checkout the item n°5 of the following documentation for help : https://github.com/y-kacher/support_debug_archive?tab=readme-ov-file#known-issues-and-solutions ");
 	}	
 
 	return $audit_result_path;
