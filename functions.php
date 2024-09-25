@@ -18,7 +18,7 @@ function generateArchive($files) {
                 audit_log("Zipped archive generated successfully $full_archive_path");
         }
         else {
-                audit_log("Zipped archive generation failed ! Checkout why below : \nsudo /bin/tar -czvf $full_archive_path $files_to_archive : $zipping_error");
+                audit_log("[ERROR] Zipped archive generation failed ! Checkout why below :");
 				audit_log("[DEBUG] sudo /bin/tar -czvf $full_archive_path $files_to_archive : $zipping_error");
 	}
     return $full_archive_path;
@@ -35,15 +35,15 @@ function generateAudit() {
 	$audit_timeout       = "60"; // if you have a lot of poller you may ajust this value.
 	$audit_command       = "$timeout_cmd $audit_timeout $audit_scrpit_path $audit_options";
 
-	audit_log("Generating audit ...");
+	audit_log("[INFO] Generating audit ...");
 	$output = shell_exec($audit_command);
-	audit_log("Audit output : $output");
+	audit_log("[INFO] Audit output : $output");
 	
 	if (file_exists($audit_result_path)) {
-		audit_log("Audit file generated successfully $audit_result_path");
+		audit_log("[INFO] Audit file generated successfully $audit_result_path");
 	}
 	else {
-        	audit_log("Audit file generation failed !");
+        	audit_log("[WARNING] Audit file generation failed !");
 	}	
 
 	return $audit_result_path;
@@ -57,8 +57,8 @@ function getAuditScript() {
 	$audit_scrpit_path = $directory_audit_script.$audit_script_name;
 	
 	if (!file_exists($audit_scrpit_path)) {
-        	audit_log("Audit Script not found !");
-        	audit_log("Downloading audit script from $url");
+        	audit_log("[INFO] Audit Script not found !");
+        	audit_log("[INFO] Downloading audit script from $url");
 		
 		// Get content from url without setting allow_url_fopen=1
         	$curlSession = curl_init();
@@ -70,18 +70,18 @@ function getAuditScript() {
 		curl_close($curlSession);
 
 		if (file_put_contents($audit_scrpit_path, $audit_script)){
-                	audit_log("Audit script downloaded successfully");
-                	audit_log("Audit script path is : $audit_scrpit_path");
+                	audit_log("[INFO] Audit script downloaded successfully");
+                	audit_log("[INFO] Audit script path is : $audit_scrpit_path");
   
                 	shell_exec("chmod +x $audit_scrpit_path");
-                	audit_log("Execution right added to $audit_scrpit_path");
+                	audit_log("[INFO] Execution right added to $audit_scrpit_path");
         	}
         	else {
-                	audit_log("Audit script download failed.");
+                	audit_log("[WARNING] Audit script download failed.");
         	}
 	}
 	else {
-	        audit_log("Audit Script found !");
+	        audit_log("[INFO] Audit Script found !");
 	}
 		
      return $audit_scrpit_path;
@@ -120,7 +120,7 @@ function download_audit($audit_file){
             readfile($audit_file);
     }
     else{
-            audit_log("File downloading failed. File '$audit_file' does not exist");
+            audit_log("[ERROR] File downloading failed. File '$audit_file' does not exist");
 			include('error_screen.html');
     }
 }
