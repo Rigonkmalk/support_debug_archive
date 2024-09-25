@@ -18,7 +18,7 @@ function generateArchive($files) {
                 audit_log("Zipped archive generated successfully $full_archive_path");
         }
         else {
-                audit_log("[ERROR] Zipped archive generation failed ! Checkout why below :");
+                audit_log("[ERROR] Zipped archive generation failed using apache user ! Checkout why below :");
 				audit_log("[DEBUG] sudo /bin/tar -czvf $full_archive_path $files_to_archive : $zipping_error");
 	}
     return $full_archive_path;
