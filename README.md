@@ -3,11 +3,23 @@ Download a zipped archive with the platform's information and logs to identify i
 
 ## How to install ?
 
-1. Intall git :
+##### Automatic install :
+1. Download the install script : 
+- ```curl -O https://raw.githubusercontent.com/y-kacher/support_debug_archive/refs/heads/master/install_debug_archive_generation.sh```
+2. Enable the downloaded script to be executed :
+- ```chmod u+x install_debug_archive_generation.sh```
+3. Execute the script :
+- ```./install_debug_archive_generation.sh```
+4. Enjoy, go to " Administration  >  Parameters  >  Debug " :
+
+<img alt="image" src="https://github.com/ykacherCentreon/support_debug_archive/assets/85548802/ba40fe1c-b8b1-4b93-9e5e-8106e5ad8c7e">
+##### Manual installation :
+
+1. Install git :
   - RHEL : ```yum install git``` 
   - Debian : ```apt update && apt install git```
 2. Clone this repository on to your centreon central server :
-  - ```git clone https://github.com/ykacherCentreon/support_debug_archive.git ~/support_debug_archive```  <br />
+  - ```git clone https://github.com/ykacherCentreon/support_debug_archive.git ~/support_debug_archive``` 
   In case you are not able to do so from your central server (e.g., no internet access), transfer the downloaded files via sftp or a drive and proceed with the steps below.
 3. Backup the content of /usr/share/centreon/www/include/Administration/parameters/debug : 
   - ```sudo -u centreon /bin/cp -r /usr/share/centreon/www/include/Administration/parameters/debug{,.origin}```
@@ -55,17 +67,17 @@ NOTE : The more poller you have, the longer the audit will take.
   
 - Hanging on "Generating, please wait 😁" ?
 1. Refresh the page and try again, this can happens right after installation.
-2. If you still encounter the issue, please check if you have a timeout related to /usr/share/centreon/www/include/Administration/parameters/debug/audit.php :<br />
-    - RHEL : ```grep -Rni "/parameters/debug/" /var/log/httpd/```<br />
+2. If you still encounter the issue, please check if you have a timeout related to /usr/share/centreon/www/include/Administration/parameters/debug/audit.php :
+    - RHEL : ```grep -Rni "/parameters/debug/" /var/log/httpd/```
     - Debian : ```grep -Rni "/parameters/debug/" /var/log/apache2/```
 3. You can kill the hanging process :
      - ```ps -ef | grep gorgone_audit.pl | grep -v grep | awk '{print $2}' && (kill -TERM $!; sleep 1; kill -9 $!)```
 4. Refresh the page and try again.
 5. Still stuck ? 
-   1. You can adapt the timeout value for the audit generation at line 34 of /usr/share/centreon/www/include/Administration/parameters/debug/functions.php :  
+   1. You can adapt the timeout value for the audit generation at line 35 of /usr/share/centreon/www/include/Administration/parameters/debug/functions.php :  
    ```$audit_timeout       = "60"; // if you have a lot of poller you may ajust this value```
    2. Or bypass the audit generation :
-     - Comment the line 24 in /usr/share/centreon/www/include/Administration/parameters/debug/audit.php :
+     - Comment the line 23 in /usr/share/centreon/www/include/Administration/parameters/debug/audit.php :
      ```php   
       23 ...
       24 //$conf_and_log_files_to_archive [] = generateAudit();
