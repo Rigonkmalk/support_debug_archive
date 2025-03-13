@@ -36,20 +36,21 @@ In case there is any issue with the tool, check the log files below for clues :
 /var/log/php-fpm/centreon-error.log
 ```
 
-RHEL : 
+RHEL :
 
 
 ```
 grep -Rni "timeout" /var/log/httpd
 ```
-Debian : 
+
+Debian :
 
 ```
 grep -Rni "timeout" /var/log/apache2/
 ```
 
 ## Known Issues and solutions
-  
+
 - Hanging on "Generating, please wait 😁" ?
 1. Time the audit execution : 
 ```
@@ -64,20 +65,30 @@ NOTE : The more pollers you have, the longer the audit will take.
       ```
   - Path for Debian : `/etc/apache2/sites-available/centreon.conf`
     - Restart apache
-    ```
-    systemctl restart apache2
-    ```
+      ```
+      systemctl restart apache2
+      ```
  
 2. Refresh the page and try again, this can happen right after installation.
 3. If you still encounter the issue, please check if you have a timeout related to /usr/share/centreon/www/include/Administration/parameters/debug/audit.php :
-    - RHEL : ```grep -Rni "/parameters/debug/" /var/log/httpd/```
-    - Debian : ```grep -Rni "/parameters/debug/" /var/log/apache2/```
+    - RHEL :
+    ```
+    grep -Rni "/parameters/debug/" /var/log/httpd/
+    ```
+    - Debian :
+    ```
+    grep -Rni "/parameters/debug/" /var/log/apache2/
+    ```
 4. You can kill the hanging process :
-     - ```ps -ef | grep gorgone_audit.pl | grep -v grep | awk '{print $2}' && (kill -TERM $!; sleep 1; kill -9 $!)```
+    ```
+    ps -ef | grep gorgone_audit.pl | grep -v grep | awk '{print $2}' && (kill -TERM $!; sleep 1; kill -9 $!)
+    ```
 5. Refresh the page and try again.
 6. Still stuck ? 
    1. You can adapt the timeout value for the audit generation at line 35 of /usr/share/centreon/www/include/Administration/parameters/debug/functions.php :  
-   ```$audit_timeout       = "60"; // if you have a lot of poller you may ajust this value```
+   ```
+   $audit_timeout       = "60"; // if you have a lot of poller you may ajust this value
+   ```
    2. Or bypass the audit generation :
      - Comment the line 23 in /usr/share/centreon/www/include/Administration/parameters/debug/audit.php :
      ```php   
