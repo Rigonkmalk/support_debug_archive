@@ -47,12 +47,12 @@ detect_centreon_version() {
 }
 
 git_raw_content () {
-    detect_centreon_version
-    # https://raw.githubusercontent.com/centreon/centreon/refs/heads/develop/centreon/www/include/Administration/parameters/debug/form.ihtml
-    for file in form.ihtml  form.php  help.php  index.html; do
-        echo https://raw.githubusercontent.com/centreon/centreon/refs/heads/$(detect_centreon_version)/centreon/www/include/Administration/parameters/debug/${file}
+    install_dir="/usr/share/centreon/www/include/Administration/parameters/debug"
+    for file in form.ihtml form.php help.php index.html; do
+        curl -o $install_dir/${file} https://raw.githubusercontent.com/centreon/centreon/refs/heads/$(detect_centreon_version)/centreon/www/include/Administration/parameters/debug/${file}
+        chown centreon: $install_dir/${file}
+        chmod 775 $install_dir/${file}
     done
-    exit 1
 }
 
 install_debug_archive_tool() {
@@ -82,19 +82,15 @@ add_sudoers_file(){
 }
 
 restore_original_files() {
-    detect_centreon_version
     install_dir="/usr/share/centreon/www/include/Administration/parameters/debug"
-    copy_cmd="/bin/cp"
 
     # Delete installed content
     printf "Suppress installed content...\n"
     rm -f $install_dir/*
 
-
-
     # Restore the original content
     printf "Restoring original files...\n"
-    sudo -u centreon $copy_cmd -r $install_dir.origin/* $install_dir
+    git_raw_content
 }
 
 # Check if the restore flag is set
@@ -105,12 +101,6 @@ if [[ "$1" == "--restore" ]]; then
     exit 1
 fi
 
-
-if [[ "$1" == "--debug" ]]; then
-    git_raw_content
-fi
-
-
 if [[ "$1" == "--install" ]]; then
     echo -e "######### Starting installation #########"
     install_git
@@ -119,4 +109,10 @@ if [[ "$1" == "--install" ]]; then
     rm -rf $destination #clean the cloned repo file after having installed them
     add_sudoers_file
     echo -e "######### Installation finished #########"
+fi
+
+if [[ -z "$1" ]]; then
+    printf "--restore : Restore files\n"
+    printf "--install : Install debug tools\n"
+    exit 0
 fi
