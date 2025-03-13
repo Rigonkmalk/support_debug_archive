@@ -110,10 +110,13 @@ if [[ "$1" == "--debug" ]]; then
     git_raw_content
 fi
 
-echo -e "######### Starting installation #########"
-install_git
-clone_repo
-install_debug_archive_tool $destination
-rm -rf $destination #clean the cloned repo file after having installed them
-add_sudoers_file
-echo -e "######### Installation finished #########"
+
+if [[ "$1" == "--install" ]]; then
+    echo -e "######### Starting installation #########"
+    install_git
+    clone_repo
+    install_debug_archive_tool $destination
+    rm -rf $destination #clean the cloned repo file after having installed them
+    add_sudoers_file
+    echo -e "######### Installation finished #########"
+fi
