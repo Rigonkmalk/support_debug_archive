@@ -60,6 +60,25 @@ add_sudoers_file(){
 
 }
 
+
+restore_original_files() {
+    install_dir="/usr/share/centreon/www/include/Administration/parameters/debug"
+    copy_cmd="/bin/cp"
+
+    # Restore the original content
+    echo -e "Restoring original files..."
+    sudo -u centreon $copy_cmd -r $install_dir.origin/* $install_dir
+    rm -rf $install_dir.origin
+}
+
+# Check if the restore flag is set
+if [[ "$1" == "--restore" ]]; then
+    printf "###### Restore files ######"
+    restore_original_files
+    printf "###### End of Restoring files ######"
+    exit 1
+fi
+
 echo -e "######### Starting installation #########"
 install_git
 clone_repo
