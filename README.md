@@ -56,13 +56,17 @@ grep -Rni "timeout" /var/log/apache2/
 time /usr/share/centreon/www/include/Administration/parameters/debug/gorgone_audit.pl
 ```
 NOTE : The more pollers you have, the longer the audit will take.
-- Change the ```ProxyTimeout``` setting of apache in the configuration file to be greater than the "real" value returned by the previous command :
-  - Path for RHEL   : ```/etc/httpd/conf.d/10-centreon.conf```
+- Change the `ProxyTimeout` setting of apache in the configuration file to be greater than the "real" value returned by the previous command :
+  - Path for RHEL   : `/etc/httpd/conf.d/10-centreon.conf`
     - Restart apache
-      - ```systemctl restart httpd```
-  - Path for Debian : ```/etc/apache2/sites-available/centreon.conf```
+      ```
+      systemctl restart httpd
+      ```
+  - Path for Debian : `/etc/apache2/sites-available/centreon.conf`
     - Restart apache
-      - ```systemctl restart apache2```
+    ```
+    systemctl restart apache2
+    ```
  
 2. Refresh the page and try again, this can happen right after installation.
 3. If you still encounter the issue, please check if you have a timeout related to /usr/share/centreon/www/include/Administration/parameters/debug/audit.php :
