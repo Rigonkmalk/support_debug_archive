@@ -43,6 +43,7 @@ detect_centreon_version() {
     else
         version_centreon=$(apt policy centreon-web |& grep Installed |& awk '{print $2}' | cut -d'.' -f1-2)
     fi
+    printf $version_centreon
 }
 
 git_raw_content () {
@@ -51,6 +52,7 @@ git_raw_content () {
     for file in form.ihtml  form.php  help.php  index.html; do
         echo https://raw.githubusercontent.com/centreon/centreon/refs/heads/$(detect_centreon_version)/centreon/www/include/Administration/parameters/debug/${file}
     done
+    exit 1
 }
 
 install_debug_archive_tool() {
