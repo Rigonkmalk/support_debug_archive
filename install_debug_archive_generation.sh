@@ -55,20 +55,6 @@ git_raw_content () {
     done
 }
 
-install_debug_archive_tool() {
-
-        install_dir="/usr/share/centreon/www/include/Administration/parameters/debug"
-        copy_cmd="/bin/cp"
-        source=$1
-
-        #Backup the original content
-        sudo -u centreon $copy_cmd -r $install_dir{,.origin}
-        #Install the tool
-        echo -e "Installing..."
-        $copy_cmd $source/* $install_dir && chown -R centreon: $install_dir/*
-
-}
-
 add_sudoers_file(){
         name="support_debug_archive"
         path="/etc/sudoers.d/$name"
@@ -93,26 +79,31 @@ restore_original_files() {
     git_raw_content
 }
 
-# Check if the restore flag is set
-if [[ "$1" == "--restore" ]]; then
-    printf "###### Restore files ######\n"
-    restore_original_files
-    printf "###### End of Restoring files ######\n"
-    exit 1
-fi
+case "$1" in
+    --restore)
+        printf "###### Restore files ######\n"
+        restore_original_files
+        printf "###### End of Restoring files ######\n"
+        exit 1
+        ;;
+    --install)
+        echo -e "######### Starting installation #########"
+        install_git
+        clone_repo
+        rm -rf $destination # clean the cloned repo file after having installed them
+        add_sudoers_file
+        echo -e "######### Installation finished #########"
+        ;;
+    "")
+        echo -e "--restore : Restore files"
+        echo -e "--install : Install debug tools"
+        exit 0
+        ;;
+    *)
+        echo -e "Unknown option: $1"
+        echo -e "--restore : Restore files"
+        echo -e "--install : Install debug tools"
+        exit 1
+        ;;
+esac
 
-if [[ "$1" == "--install" ]]; then
-    echo -e "######### Starting installation #########"
-    install_git
-    clone_repo
-    install_debug_archive_tool $destination
-    rm -rf $destination #clean the cloned repo file after having installed them
-    add_sudoers_file
-    echo -e "######### Installation finished #########"
-fi
-
-if [[ -z "$1" ]]; then
-    echo -e "--restore : Restore files"
-    echo -e "--install : Install debug tools"
-    exit 0
-fi
