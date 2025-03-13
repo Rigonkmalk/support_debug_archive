@@ -65,17 +65,21 @@ restore_original_files() {
     install_dir="/usr/share/centreon/www/include/Administration/parameters/debug"
     copy_cmd="/bin/cp"
 
+    # Delete installed content
+    printf "Suppress installed content...\n"
+    rm -fr $install_dir/*
+
     # Restore the original content
-    echo -e "Restoring original files..."
+    printf "Restoring original files...\n"
     sudo -u centreon $copy_cmd -r $install_dir.origin/* $install_dir
     rm -rf $install_dir.origin
 }
 
 # Check if the restore flag is set
 if [[ "$1" == "--restore" ]]; then
-    printf "###### Restore files ######"
+    printf "###### Restore files ######\n"
     restore_original_files
-    printf "###### End of Restoring files ######"
+    printf "###### End of Restoring files ######\n"
     exit 1
 fi
 
