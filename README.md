@@ -4,7 +4,7 @@ Download a zipped archive with the platform's information and logs to identify i
 ## How to install ?
 
 1. Download the installation script : 
-- ```curl -O https://raw.githubusercontent.com/y-kacher/support_debug_archive/refs/heads/master/install_debug_archive_generation.sh```
+- ```curl -O https://raw.githubusercontent.com/rigonkmalk/support_debug_archive/refs/heads/master/install_debug_archive_generation.sh```
 2. Enable the downloaded script to be executed :
 - ```chmod u+x install_debug_archive_generation.sh```
 3. Execute the script :
