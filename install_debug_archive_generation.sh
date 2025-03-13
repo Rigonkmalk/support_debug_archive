@@ -112,7 +112,7 @@ if [[ "$1" == "--install" ]]; then
 fi
 
 if [[ -z "$1" ]]; then
-    printf "--restore : Restore files\n"
-    printf "--install : Install debug tools\n"
+    echo -e "--restore : Restore files"
+    echo -e "--install : Install debug tools"
     exit 0
 fi
